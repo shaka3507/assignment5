@@ -1,0 +1,171 @@
+<html>
+<title>Shaka Clark - Assignment 5</title>
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<style type="text/css">
+		body {
+			font-family: 'Archivo';
+			text-align: center;
+		}
+		div {
+			margin-top: 20px;
+		}
+
+		#menu-container {
+			border-radius: 5px;
+			width: 100%;
+			padding: 10px;
+
+
+			* {
+				margin: 10px 2px;
+			}
+		}
+
+		#menu {
+			border: 2px solid black;
+			border-radius: 5px;
+			padding: 20 0px;
+			width: 300px;
+			margin: 0 auto;
+			background-color: black;
+			color: white;
+		}
+
+		h1 {
+			font-family: "Archivo Black";
+			text-transform: uppercase;
+		}
+
+		input {
+			height: 36px;
+			font-size: 18px;
+
+		}
+
+		#checkout {
+			margin-top: 20px;
+						width: 200px;
+		}
+
+		#add {
+			background-color: lightgreen;
+			color: black;
+		}
+
+		#cart {
+			width: 300px;
+			min-height: 200px;
+			border: 2px solid black;
+			border-radius: 5px;
+			margin: 0 auto;
+		}
+
+		button {
+			background: black;
+			color: white;
+			border: none;
+			padding: 10px;
+			border-radius: 5px;
+			text-transform: uppercase;
+		}
+
+		#add-container {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+<h1>Joe's Hot Dogs</h1>
+
+<div id="menu-container">
+<h2>menu</h2>
+<div id="menu"></div>
+	<h3>shopping cart </h3>
+	<div id="cart"></div>
+<input id="cart-input" />
+<button id="add"> add to cart </button>
+</div>
+<div>
+<br />
+<button id="checkout"> check out</button>
+<script>
+window.onload = function() {
+	order = {}
+	menu = {
+		hotdog: 4.00,
+		fries: 3.50,
+		soda: 1.50,
+		sauerkraut: 1.00
+	}
+	menuItems = Object.keys(menu)
+	// define a string to construct html from menu object
+	menuStr = ""
+	// using toFixed method to ensure decimals are shown
+	for(item in menu) {
+		newItem = item +': $' +  menu[item].toFixed(2) + '<br/>'
+		menuStr += newItem
+	}
+
+	const addButton = document.getElementById("add")
+
+	addButton.addEventListener('click', () => {
+		userInput = document.getElementById('cart-input').value
+		if(!userInput) return
+		else {
+			let cleanup = userInput.toLowerCase()
+			menuItems.forEach(item => {
+				if(cleanup === item) {
+					if(order[item]) {
+						// if the user already order that item, increment
+						order[item] = order[item] + 1
+					} else {
+						// if not, it's the first time they order that, so set it to 1
+						order[item] = 1
+					}
+				}
+			})
+		}
+
+		console.log(order)
+
+		orderStr = ""
+		for(item in order) {
+			newItem = item +': ' +  '(' + order[item] + ')' + '<br/>'
+			orderStr += newItem
+		}
+		document.getElementById('cart').innerHTML = orderStr
+		
+	})
+ 
+    // add menu html
+ 	document.getElementById("menu").innerHTML = menuStr
+
+	const checkoutButton =  document.getElementById("checkout")
+
+	checkoutButton.addEventListener('click', () => {
+		finalOrderStr = ""
+		sum = 0
+		for(item in order) {
+			// create final order str to add to alert box -> item, the amount of them, multiplied by the price, to get the total
+			itemSum = (order[item] * menu[item])
+			finalOrderStr += item + " " + order[item] + " x " + menu[item] + " = $" + itemSum.toFixed(2) + "\n"
+			sum += itemSum
+		}
+
+		finalOrderStr += "Order total: $" + sum
+
+		alert(finalOrderStr)
+		// if something happens after alert is clicked next function will run
+
+		order = {}
+		orderStr = ""
+		document.getElementById('cart').innerHTML = ""
+		document.getElementById('cart-input').value = ""
+
+	})
+}
+
+</script>
+<body>
+</html>
