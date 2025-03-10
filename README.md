@@ -3,11 +3,6 @@
 ## Live URL
 https://shaka3507.github.io/assignment5/index.html
 
-## Notes:
-Free image sourced from freepik:
-[source link](https://www.freepik.com/free-photo/french-fries_3567101.htm#fromView=search&page=1&position=1&uuid=9f2e0828-14fd-46bd-ad73-64852c3ed99c&query=french+fry+)
-
-
 ## Requirements:
 Part 1
 - [x] Create a representation of the items and prices as an associative array of items
