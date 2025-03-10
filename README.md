@@ -3,7 +3,7 @@
 ## Live URL
 https://shaka3507.github.io/assignment5/index.html
 
-# Assignment question
+## Assignment question
 The most interesting thing from this week was learning the [] array syntax for creating associate arrays. I'm more familiar with {} notation, but was amazed to see that you can set for example person = [], person["age"] = 10 as a way to store information. I'm still wondering what the benefits are of that syntax versus person = {"age": 10}. I'm also surprised and excited to use destructuring to assign and reassign elements within an array.
 
 ## Requirements:
