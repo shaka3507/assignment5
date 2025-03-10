@@ -1,15 +1,39 @@
 <html>
 <title>Shaka Clark - Assignment 5</title>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 	<style type="text/css">
 		body {
 			font-family: 'Archivo';
 			text-align: center;
+			background-image: url("https://i.ibb.co/sd7n6dKX/2253493.jpg");
 		}
 		div {
 			margin-top: 20px;
 		}
+
+
+		h1 {
+			font-family: "Archivo Black";
+			text-transform: uppercase;
+		}
+
+		input {
+			background-color: white;
+			height: 36px;
+			font-size: 18px;
+		}
+
+		button {
+			background: black;
+			color: white;
+			border: none;
+			padding: 10px;
+			border-radius: 5px;
+			text-transform: uppercase;
+		}
+
 
 		#menu-container {
 			border-radius: 5px;
@@ -22,6 +46,7 @@
 			}
 		}
 
+
 		#menu {
 			border: 2px solid black;
 			border-radius: 5px;
@@ -32,20 +57,9 @@
 			color: white;
 		}
 
-		h1 {
-			font-family: "Archivo Black";
-			text-transform: uppercase;
-		}
-
-		input {
-			height: 36px;
-			font-size: 18px;
-
-		}
-
 		#checkout {
 			margin-top: 20px;
-						width: 200px;
+			width: 200px;
 		}
 
 		#add {
@@ -59,113 +73,124 @@
 			border: 2px solid black;
 			border-radius: 5px;
 			margin: 0 auto;
+			background-color: white;
 		}
-
-		button {
-			background: black;
-			color: white;
-			border: none;
-			padding: 10px;
-			border-radius: 5px;
-			text-transform: uppercase;
-		}
-
-		#add-container {
-			display: block;
+		
+		#cart-action {
+			display: flex;
+    		width: 100%;
+    		justify-content: center;
 		}
 	</style>
 </head>
 <body>
-<h1>Joe's Hot Dogs</h1>
+	<h1>Joe's Hot Dogs</h1>
+	<div id="menu-container">
+		<h2>menu</h2>
+		<div id="menu"></div>
+		<h3>shopping cart </h3>
+		<div id="cart"></div>
+		<div id="cart-action">
+			<input id="cart-input" />
+			<button id="add"> add to cart </button>
+		</div>
+	<div>
+	<br />
+	<button id="checkout"> check out</button>
+	<script>
+	window.onload = function() {
+		var cart = {
+			hotdog: 0,
+			fries: 0,
+			soda: 0,
+			sauerkraut: 0,
+		}
+		var menu = {
+			hotdog: 4.00,
+			fries: 3.50,
+			soda: 1.50,
+			sauerkraut: 1.00
+		}
+		var totalCartItems = 0
+		var menuItems = Object.keys(menu)
+		// define a string to construct html from menu object
+		var menuStr = ""
+		// using toFixed method to ensure decimals are shown
+		for(item in menu) {
+			newItem = item +': $' +  menu[item].toFixed(2) + '<br/>'
+			menuStr += newItem
+		}
 
-<div id="menu-container">
-<h2>menu</h2>
-<div id="menu"></div>
-	<h3>shopping cart </h3>
-	<div id="cart"></div>
-<input id="cart-input" />
-<button id="add"> add to cart </button>
-</div>
-<div>
-<br />
-<button id="checkout"> check out</button>
-<script>
-window.onload = function() {
-	order = {}
-	menu = {
-		hotdog: 4.00,
-		fries: 3.50,
-		soda: 1.50,
-		sauerkraut: 1.00
-	}
-	menuItems = Object.keys(menu)
-	// define a string to construct html from menu object
-	menuStr = ""
-	// using toFixed method to ensure decimals are shown
-	for(item in menu) {
-		newItem = item +': $' +  menu[item].toFixed(2) + '<br/>'
-		menuStr += newItem
-	}
+		var addButton = document.getElementById("add")
 
-	const addButton = document.getElementById("add")
-
-	addButton.addEventListener('click', () => {
-		userInput = document.getElementById('cart-input').value
-		if(!userInput) return
-		else {
-			let cleanup = userInput.toLowerCase()
-			menuItems.forEach(item => {
-				if(cleanup === item) {
-					if(order[item]) {
-						// if the user already order that item, increment
-						order[item] = order[item] + 1
+		addButton.addEventListener('click', () => {
+			userInput = document.getElementById('cart-input').value
+			if(!userInput) return
+			else {
+				let cleanup = userInput.toLowerCase() // to ensure case insensitivity for user input
+				menuItems.forEach(item => {
+					if(cleanup === item) {
+						cart[item] = cart[item] + 1
+						totalCartItems++
 					} else {
-						// if not, it's the first time they order that, so set it to 1
-						order[item] = 1
+						console.log("item does not exist")
 					}
+				})
+			}
+
+			cartStr = ""
+			for(item in cart) {
+				// only add to cart html if quantity greater than 0
+				if(cart[item] > 0) {
+					newItem = item +': ' +  '(' + cart[item] + ')' + '<br/>'
+					cartStr += newItem
 				}
-			})
-		}
+			}
+			// update UI
+			document.getElementById('cart').innerHTML = cartStr
+			
+		})
+	 
+	    // add menu html
+	 	document.getElementById("menu").innerHTML = menuStr
 
-		console.log(order)
+		var checkoutButton =  document.getElementById("checkout")
 
-		orderStr = ""
-		for(item in order) {
-			newItem = item +': ' +  '(' + order[item] + ')' + '<br/>'
-			orderStr += newItem
-		}
-		document.getElementById('cart').innerHTML = orderStr
-		
-	})
- 
-    // add menu html
- 	document.getElementById("menu").innerHTML = menuStr
+		checkoutButton.addEventListener('click', () => {
+			finalCartStr = "Checkout summary: \n"
+			sum = 0
+			for(item in cart) {
+				if(cart[item] > 0) {
+					// create final cart str to add to alert box -> item, the amount of them, multiplied by the price, to get the total
+					itemSum = (cart[item] * menu[item])
+					var nameOfItem = cart[item]
+					var costOfOneItem = "$" + menu[item].toFixed(2)
+					var finalSum = "$" + itemSum.toFixed(2)
 
-	const checkoutButton =  document.getElementById("checkout")
+					finalCartStr += item + " " + nameOfItem + " x " + costOfOneItem + " = " + finalSum + "\n"
+					sum += itemSum
+				}
+			}
+			// add card total to alert text
+			finalCartStr += "Total number of items in cart: " + totalCartItems + "\n"
+			finalCartStr += "Final cart total: " + "$" + sum.toFixed(2)
 
-	checkoutButton.addEventListener('click', () => {
-		finalOrderStr = ""
-		sum = 0
-		for(item in order) {
-			// create final order str to add to alert box -> item, the amount of them, multiplied by the price, to get the total
-			itemSum = (order[item] * menu[item])
-			finalOrderStr += item + " " + order[item] + " x " + menu[item] + " = $" + itemSum.toFixed(2) + "\n"
-			sum += itemSum
-		}
+			alert(finalCartStr.toUpperCase())
+			// if something happens after alert is clicked next function will run
 
-		finalOrderStr += "Order total: $" + sum
-
-		alert(finalOrderStr)
-		// if something happens after alert is clicked next function will run
-
-		order = {}
-		orderStr = ""
-		document.getElementById('cart').innerHTML = ""
-		document.getElementById('cart-input').value = ""
-
-	})
-}
-
-</script>
+			// reset cart and orderStr and ui
+			cart = {
+				hotdog: 0,
+				fries: 0,
+				soda: 0,
+				sauerkraut: 0,
+			}
+			cartStr = ""
+			totalCartItems = 0
+			document.getElementById('cart').innerHTML = ""
+			document.getElementById('cart-input').value = ""
+		})
+	}
+	</script>
 <body>
 </html>
